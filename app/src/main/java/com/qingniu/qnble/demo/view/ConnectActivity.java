@@ -193,6 +193,11 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
                     onReceiveScaleData(qnScaleData);
                 }
             }
+
+            @Override
+            public void onGetElectric(QNBleDevice qnBleDevice, int i) {
+                Log.d("ConnectActivity", "收到电量信息:" + i);
+            }
         });
     }
 
