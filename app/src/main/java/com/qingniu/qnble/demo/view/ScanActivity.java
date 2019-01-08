@@ -112,7 +112,7 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
         ButterKnife.bind(this);
 
         mQNBleApi = QNBleApi.getInstance(this);
-        //动态申请权限(Android6.0以后需要)
+        //Dynamic application permission (Android6.0以后需要)
         AndroidPermissionCenter.verifyPermissions(this);
         initIntent();
         initData();
@@ -149,7 +149,7 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void initData() {
-        QNConfig mQnConfig = mQNBleApi.getConfig();//获取上次设置的对象,未设置获取的是默认对象
+        QNConfig mQnConfig = mQNBleApi.getConfig();//Get the last set object, not set to get the default object
         mQnConfig.setAllowDuplicates(mConfig.isAllowDuplicates());
         mQnConfig.setDuration(mConfig.getDuration());
         mQnConfig.setScanOutTime(mConfig.getScanOutTime());
@@ -164,7 +164,7 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-        mScanAppid.setText("UserId : " + mUser.getUserId());
+        mScanAppid.setText(String.format("%s%s", getString(R.string.userid), mUser.getUserId()));
     }
 
     private void initIntent() {
@@ -241,14 +241,14 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
                     listAdapter.notifyDataSetChanged();
                     startScan();
                 } else {
-                    ToastMaker.show(this, "正在扫描");
+                    ToastMaker.show(this, "Scanning");
                 }
                 break;
             case R.id.stopBtn:
                 if (isScanning) {
                     stopScan();
                 } else {
-                    ToastMaker.show(this, "已经停止扫描");
+                    ToastMaker.show(this, "Scanning has stopped");
                 }
                 break;
         }
@@ -261,9 +261,9 @@ public class ScanActivity extends AppCompatActivity implements AdapterView.OnIte
         if (requestCode == AndroidPermissionCenter.REQUEST_EXTERNAL_STORAGE) {
             for (int i = 0; i < permissions.length; i++) {
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "" + "权限" + permissions[i] + "申请成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "" + "Permission" + permissions[i] + "Success getting permission", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "" + "权限" + permissions[i] + "申请失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "" + "Permission" + permissions[i] + "Failed getting permission", Toast.LENGTH_SHORT).show();
                 }
             }
         }

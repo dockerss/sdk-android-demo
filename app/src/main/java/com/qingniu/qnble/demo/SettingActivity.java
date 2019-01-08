@@ -79,10 +79,10 @@ public class SettingActivity extends AppCompatActivity implements RadioGroup.OnC
     @BindView(R.id.connect_out_timeEt)
     EditText mConnectOutEt;
 
-    private Config mBleConfig; //蓝牙配置对象
-    private String mGender = "male";//用户性别
-    private int mHeight = 172; //用户身高
-    private Date mBirthday = null; //用户生日
+    private Config mBleConfig; //Bluetooth configuration object
+    private String mGender = "male";//User gender
+    private int mHeight = 172; //User height
+    private Date mBirthday = null; //User birthday
 
     private User mUser;
     private QNBleApi mQnBleApi;
@@ -141,11 +141,11 @@ public class SettingActivity extends AppCompatActivity implements RadioGroup.OnC
                 mUser.setAthleteType(QNInfoConst.CALC_ATHLETE);
                 break;
             case R.id.ble_scan_first_time:
-                //每个设备单次扫描只返回一次
+              //Each device returns only once in a single scan
                 mBleConfig.setAllowDuplicates(false);
                 break;
             case R.id.ble_scan_every_time:
-                //每个设备单次扫描回调多次,不过信号强度不同
+                //Each device scans the callback multiple times, but the signal strength is different
                 mBleConfig.setAllowDuplicates(true);
                 break;
             case R.id.user_unit_kg:
@@ -224,7 +224,7 @@ public class SettingActivity extends AppCompatActivity implements RadioGroup.OnC
             scanTime = Integer.parseInt(mScanEt.getText().toString().trim());
         } catch (Exception e) {
             e.printStackTrace();
-            ToastMaker.show(this, "请填写正确的扫描时间");
+            ToastMaker.show(this, "Please fill in the correct scan time");
             return true;
         }
         long scanOutTime = 0L;
@@ -232,7 +232,7 @@ public class SettingActivity extends AppCompatActivity implements RadioGroup.OnC
             scanOutTime = Long.parseLong(mScanOutEt.getText().toString().trim());
         } catch (Exception e) {
             e.printStackTrace();
-            ToastMaker.show(this, "请填写正确的扫描超时时间");
+            ToastMaker.show(this, "Please fill in the correct scan timeout");
             return true;
         }
 
@@ -241,27 +241,27 @@ public class SettingActivity extends AppCompatActivity implements RadioGroup.OnC
             connectOutTime = Long.parseLong(mConnectOutEt.getText().toString().trim());
         } catch (Exception e) {
             e.printStackTrace();
-            ToastMaker.show(this, "请填写正确的连接超时时间");
+            ToastMaker.show(this, "Please fill in the correct connection timeout");
             return true;
         }
 
         if (userId.isEmpty()) {
-            ToastMaker.show(this, "用户id不能为空");
+            ToastMaker.show(this, "User id cannot be empty");
             return true;
         } else if (mUserGenderGrp.getCheckedRadioButtonId() == -1) {
-            ToastMaker.show(this, "请选择性别");
+            ToastMaker.show(this, "Please select gender");
             return true;
         } else if (mHeight == 0) {
-            ToastMaker.show(this, "请输入身高");
+            ToastMaker.show(this, "Please enter the height");
             return true;
         } else if (mBirthday == null) {
-            ToastMaker.show(this, "请输入出生日期");
+            ToastMaker.show(this, "Please enter the date of birth");
             return true;
         } else if (mBleScanGrp.getCheckedRadioButtonId() == -1) {
-            ToastMaker.show(this, "请选择蓝牙扫描模式");
+            ToastMaker.show(this, "Please select Bluetooth scan mode");
             return true;
         } else if (mUserUnitGrp.getCheckedRadioButtonId() == -1) {
-            ToastMaker.show(this, "请选择重量单位");
+            ToastMaker.show(this, "Please select the weight unit");
             return true;
         }
 

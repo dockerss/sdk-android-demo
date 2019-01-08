@@ -43,7 +43,7 @@ import static com.qingniu.qnble.demo.R.id.connectBtn;
  * author: yolanda-XY
  * date: 2018/3/23
  * package_name: com.qingniu.qnble.demo
- * description: ${设置用户信息界面}
+ * description: ${Set User Information Interface}
  */
 
 public class ConnectActivity extends AppCompatActivity implements View.OnClickListener {
@@ -86,28 +86,28 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
     private void initData() {
         initIntent();
         /**
-         * SDK中的数据以及状态监听，如果不使用一定需要设置为null；
-         * 否则下次设置监听，即使是使用的同一个对象，也会回调多次
+         * SDK The data in the state and the state listener, if it is not used, it must be set to null;
+           Otherwise, the next time you set up the listener, even if you use the same object, it will call back multiple times.
          * */
         initBleConnectStatus();
-        initUserData(); //设置数据监听器,返回数据,需在连接当前设备前设置
-        //已经连接设备先断开设备,再连接
+        initUserData(); //Set the data listener, return data, you need to set before connecting the current device
+        //If device connected , disconnect the device first, then connect
         if (mIsConnected) {
             doDisconnect();
         } else {
-            connectQnDevice(mBleDevice); //连接当前设备
+            connectQnDevice(mBleDevice); //Connect current device
         }
     }
 
     private void initBleConnectStatus() {
         mQNBleApi.setBleConnectionChangeListener(new QNBleConnectionChangeListener() {
-            //正在连接
+            //connecting
             @Override
             public void onConnecting(QNBleDevice device) {
                 setBleStatus(QNScaleStatus.STATE_CONNECTING);
             }
 
-            //已连接
+            //connected
             @Override
             public void onConnected(QNBleDevice device) {
                 setBleStatus(QNScaleStatus.STATE_CONNECTED);
@@ -118,13 +118,13 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
 
             }
 
-            //正在断开连接，调用断开连接时，会马上回调
+            //Is disconnecting, callback will be called immediately when the connection is disconnected
             @Override
             public void onDisconnecting(QNBleDevice device) {
                 setBleStatus(QNScaleStatus.STATE_DISCONNECTING);
             }
 
-            // 断开连接，断开连接后回调
+            // Disconnect, callback after disconnection
             @Override
             public void onDisconnected(QNBleDevice device) {
                 setBleStatus(QNScaleStatus.STATE_DISCONNECTED);
@@ -135,14 +135,14 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
             public void onConnectError(QNBleDevice device, int errorCode) {
                 setBleStatus(QNScaleStatus.STATE_DISCONNECTING);
                 if (errorCode == CheckStatus.ERROR_BLE_CONNECT_OVERTIME.getCode()) {
-                    Toast.makeText(ConnectActivity.this, "连接设备超时", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ConnectActivity.this, "Connection device timeout", Toast.LENGTH_SHORT).show();
                 }
             }
 
             //测量过程中的连接状态
             @Override
             public void onScaleStateChange(QNBleDevice device, int status) {
-                Log.d("ConnectActivity", "蓝牙状态是:" + status);
+                Log.d("ConnectActivity", "Bluetooth status is:" + status);
                 setBleStatus(status);
             }
         });
@@ -152,7 +152,7 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
         mQNBleApi.connectDevice(device, createQNUser(), new QNResultCallback() {
             @Override
             public void onResult(int code, String msg) {
-                Log.d("ConnectActivity", "连接设备返回:" + msg);
+                Log.d("ConnectActivity", "Connected device back:" + msg);
             }
         });
     }
@@ -162,7 +162,7 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
                 mUser.getHeight(), mUser.getGender(), mUser.getBirthDay(), mUser.getAthleteType(), new QNResultCallback() {
                     @Override
                     public void onResult(int code, String msg) {
-                        Log.d("ConnectActivity", "创建用户信息返回:" + msg);
+                        Log.d("ConnectActivity", "Create user information back:" + msg);
                     }
                 });
     }
@@ -172,19 +172,19 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
         mQNBleApi.setDataListener(new QNDataListener() {
             @Override
             public void onGetUnsteadyWeight(QNBleDevice device, double weight) {
-                Log.d("ConnectActivity", "体重是:" + weight);
+                Log.d("ConnectActivity", "Weight is:" + weight);
                 mWeightTv.setText(initWeight(weight));
             }
 
             @Override
             public void onGetScaleData(QNBleDevice device, QNScaleData data) {
-                Log.d("ConnectActivity", "收到测量数据");
+                Log.d("ConnectActivity", "Received measurement data");
                 onReceiveScaleData(data);
             }
 
             @Override
             public void onGetStoredScale(QNBleDevice device, List<QNScaleStoreData> storedDataList) {
-                Log.d("ConnectActivity", "收到存储数据");
+                Log.d("ConnectActivity", "Received stored data");
                 if (storedDataList != null && storedDataList.size() > 0) {
                     QNScaleStoreData data = storedDataList.get(0);
                     QNUser qnUser = createQNUser();
@@ -196,7 +196,7 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onGetElectric(QNBleDevice qnBleDevice, int i) {
-                Log.d("ConnectActivity", "收到电量信息:" + i);
+                Log.d("ConnectActivity", "Received battery information:" + i);
             }
         });
     }
@@ -249,8 +249,8 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
             QNScaleItemData itemData = mDatas.get(position);
 
             indicateNameTv.setText(itemData.getName());
-            //sdk返回的数据单位一直不变，用户需要自己去转化为自己需要的单位数据
-            //和重量有关的指标
+            //sdkThe returned data unit remains the same, and the user needs to convert it to the unit data he needs.
+            //weight-related indicators
             if (itemData.getType() == QNIndicator.TYPE_WEIGHT || itemData.getType() == QNIndicator.TYPE_BONE
                     || itemData.getType() == QNIndicator.TYPE_MUSCLE_MASS) {
                 indicateValueTv.setText(initWeight(itemData.getValue()));
@@ -282,59 +282,59 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
         String btnString;
         switch (bleStatus) {
             case QNScaleStatus.STATE_CONNECTING: {
-                stateString = "正在连接";
-                btnString = "断开连接";
+                stateString = "connecting";
+                btnString = "Disconnect";
                 mIsConnected = true;
                 break;
             }
             case QNScaleStatus.STATE_CONNECTED: {
-                stateString = "已连接";
-                btnString = "断开连接";
+                stateString = "connected";
+                btnString = "Disconnect";
                 mIsConnected = true;
                 break;
             }
             case QNScaleStatus.STATE_DISCONNECTING: {
-                stateString = "正在断开连接";
-                btnString = "连接";
+                stateString = "Disconnecting";
+                btnString = "Connect";
                 mIsConnected = false;
 
                 break;
             }
             case QNScaleStatus.STATE_LINK_LOSS: {
-                stateString = "连接已断开";
-                btnString = "连接";
+                stateString = "The line is disconnected";
+                btnString = "Connect";
                 mIsConnected = false;
 
                 break;
             }
             case QNScaleStatus.STATE_START_MEASURE: {
-                stateString = "正在测量";
-                btnString = "断开连接";
+                stateString = "Measuring";
+                btnString = "Disconnect";
                 break;
             }
             case QNScaleStatus.STATE_REAL_TIME: {
-                stateString = "正在测量实时体重";
-                btnString = "断开连接";
+                stateString = "Measuring real-time weight";
+                btnString = "Disconnect";
                 break;
             }
             case QNScaleStatus.STATE_BODYFAT: {
-                stateString = "正在测量阻抗";
-                btnString = "断开连接";
+                stateString = "Measuring impedance";
+                btnString = "Disconnect";
                 break;
             }
             case QNScaleStatus.STATE_HEART_RATE: {
-                stateString = "正在测量心率";
-                btnString = "断开连接";
+                stateString = "Measuring heart rate";
+                btnString = "Disconnect";
                 break;
             }
             case QNScaleStatus.STATE_MEASURE_COMPLETED: {
-                stateString = "测量完成";
-                btnString = "断开连接";
+                stateString = "Measurement completed";
+                btnString = "Disconnect";
                 break;
             }
             default: {
-                stateString = "连接已断开";
-                btnString = "连接";
+                stateString = "The line is disconnected";
+                btnString = "Connect";
                 mIsConnected = false;
                 break;
             }
@@ -371,7 +371,7 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
         mQNBleApi.connectDevice(mBleDevice, createQNUser(), new QNResultCallback() {
             @Override
             public void onResult(int code, String msg) {
-                Log.d("ConnectActivity", "连接设备返回:" + msg);
+                Log.d("ConnectActivity", "Connected device back:" + msg);
                 if (code == 0) {
                     mIsConnected = true;
                 }
@@ -385,7 +385,7 @@ public class ConnectActivity extends AppCompatActivity implements View.OnClickLi
         mQNBleApi.disconnectDevice(mBleDevice, new QNResultCallback() {
             @Override
             public void onResult(int code, String msg) {
-                Log.d("ConnectActivity", "断开连接设备返回:" + msg);
+                Log.d("ConnectActivity", "Disconnected device" + msg);
             }
         });
     }
