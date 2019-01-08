@@ -1,7 +1,6 @@
 # QN-Scale Bluetooth Android SDK 
 
-## The latest version of v0.4.2 Download (https://github.com/YolandaQingniu/sdk-android-demo/releases/download/v0.4.2/qnsdk-0.4.2-Android.zip)
-
+#### The latest version of v0.4.2 [Download (https://github.com/YolandaQingniu/sdk-android-demo/releases/download/v0.4.2/qnsdk-0.4.2-Android.zip)]
 
 ## SDK file description
 
