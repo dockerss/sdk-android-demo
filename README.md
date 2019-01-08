@@ -1,92 +1,83 @@
-# 轻牛蓝牙Android SDK 
+Light Cow Bluetooth Android SDK
+The latest version of v0.4.2 Download
+SDK file description
+Unified introduction
+Import the jar file (qnsdk-xxx.jar) in the lib of the demo project and the corresponding so file.
+Confused configuration (proguard-rules)
+-keep class com.qingniu.scale.model.BleScaleData{*;}
+operating
+QNBleApi
+This class is the main working class of the SDK, providing operations for various methods of the SDK.
 
-## 最新版本 `v0.4.2` [下载地址](https://github.com/YolandaQingniu/sdk-android-demo/releases/download/v0.4.2/qnsdk-0.4.2-Android.zip)
+Configuration
+QNConfig
+This class is the setting class of the SDK, including the configuration of the scan, the configuration of the connection, the display of the scale unit display, etc.
 
-## SDK文件说明
-### 统一引入
-#### 导入demo项目的lib中的jar文件(qnsdk-xxx.jar)和对应的so文件
+Main method of measurement process
+QNBleDeviceDiscoveryListener
+Provides a callback when scanning the scale. The scale data object of the callback is QNBleDevice.
 
-### 混淆配置(proguard-rules)
-+ -keep class com.qingniu.scale.model.BleScaleData{*;}
+QNBleDevice
+Scanning device object
 
-### 操作
-#### QNBleApi
-该类为SDK的主要工作类，提供SDK的各种方法的操作
+QNUser
+The user information object provided by the app to the SDK, which needs to be used when setting up the connection.
 
-### 配置
-#### QNConfig
-该类为SDK的设置类，包括扫描的配置、连接的配置、秤单位显示等配置
+QNBleConnectionChangeListener
+Provides callback of various Bluetooth status during use of the scale and measurement status of the scale during measurement
 
-### 测量过程主要使用方法
-#### QNBleDeviceDiscoveryListener
-提供扫描秤时的回调,回调的秤数据对象为QNBleDevice
-#### QNBleDevice
-扫描设备的对象
+QNDataListener
+Provide callbacks for measurement data, including real-time weight, measurement results, and stored data
 
-#### QNUser
-由app向SDK提供的用户信息对象，设置连接时需要用到
+QNScaleData
+Measurement result data object
 
-#### QNBleConnectionChangeListener
-提供秤在使用过程中各种蓝牙状态的回调以及测量过程中秤的测量状态
+QNScaleStoreData
+Store data objects, you can (QNScaleStoreData)generateScaleDataget QNScaleDataobjects by
 
-#### QNDataListener
-提供测量数据的回调，包括实时体重、测量结果、存储数据
-#### QNScaleData
-测量结果数据对象
-#### QNScaleStoreData
-存储数据对象,可以通过`(QNScaleStoreData)generateScaleData` 获取`QNScaleData`对象
-#### QNScaleItemData
-每个指标的详细数据对象
+QNScaleItemData
+Detailed data object for each indicator
 
+Error message
+CheckStatus
+Show all the error messages in the SDK
 
-### 错误信息
-#### CheckStatus
-展示了SDK中所有的错误信息
-
-
-## SDK调用步骤
-
-1. 初始化SDK `(QNBleApi)initSdk`
-2. 开启扫描 `(QNBleApi)startBleDeviceDiscovery`
-	+ 开启扫描需要先设置进行扫描设备的监听 `(QNBleApi)setBleDeviceDiscoveryListener`
-3. 设置扫描配置 （未设置对象时，使用默认配置）
- 	+ 获取配置信息 `(QNBleApi)getConfig()`
-	+ 设置是否只扫描开机的秤 `onlyScreenOn`
-	+ 设置扫描到秤时是否返回多次 `allowDuplicates`
-	+ 设置扫描的时间 `duration`
-	+ 设置秤端显示的单位 `unit`
-4. 设置连接状态的监听 `(QNBleApi)setBleConnectionChangeListener`
-5. 设置测量数据的监听 `(QNBleApi)setDataListener`
-6. 构建连接秤的用户对象 `(QNBleApi)buildUser:String userId,int height,String gender,Date birthday,QNResultCallback callback`
-7. 连接设备 `connectDevice:QNBleDevice device,QNUser user,QNResultCallback callback`
-
-
-
-## 注意事项
-- 必须在清单文件中申请蓝牙权限、位置权限、网络权限（离线SDK不需要）
-- SDK最低支持API版本为18
-- SDK中使用到了v4包的资源，开发者项目中需要引入v4包的依赖
-- 必须在清单文件中添加SDK需要使用到的服务：com.qingniu.qnble.scanner.BleScanService，com.qingniu.scale.ble.ScaleBleService
-- targetSdkVersion 在23及以上，需要先获取定位权限，才能扫描到设备，需要开发者自己申请
-- 如果你的项目是多进程的，建议限制在主进程才进行SDK的初始化
-
-## 常见问题
-
-1. 初始化提示appid错误
-    + 检查初始化文件和使用的appid是否匹配
-    + 检查引入的SDK是否是最新的
-2. 扫描设备调用成功，但是一直没有设备回调，且无错误回调
-    + 检查所扫描的设备，是否已经被其他人连接
-    + 部分手机需要开启GPS才能扫描到设备，请检查手机GPS是否开启
-3. 连接设备一直无法成功或者成功后很快就断开连接
-    + 检查设备是否被其他人连接了
-    + 在系统蓝牙中查看是否当前连接的设备已经被配对,如果已经配对，需要取消配对
-    + 部分手机需要先扫描才能连接成功，先扫描设备再进行连接
-4. 获取到的指标与和商务洽谈的指标数不同
-    + 先检查出现问题的设备，扫描时显示的名称是否正确
-    + 心率秤无论是否开放了心率指标，SDK都会下发心率指标
-5. 数据或者设备等监听回调，同一时间回调多次
-    + 先确定是否，设置了多次监听。当监听不使用时，一定要设置为null
-    + 确定是否是穿鞋测量，这个可能导致短时间内，完成多次测量的情况
-
-**`提示`**：遇到无法定位的问题，希望开发者能第一时间提供日志，以便我们尽快找到问题    
+SDK call steps
+Initialize the SDK (QNBleApi)initSdk
+Turn on scanning (QNBleApi)startBleDeviceDiscovery
+To enable scanning, you need to set the monitoring device to scan first. (QNBleApi)setBleDeviceDiscoveryListener
+Set the scan configuration (the default configuration is used when no object is set)
+Get configuration information (QNBleApi)getConfig()
+Set whether to scan only the scale that is turned on onlyScreenOn
+Set whether to return multiple times when scanning to the scale allowDuplicates
+Set the scan time duration
+Set the unit displayed on the scale end unit
+Set the connection status monitor (QNBleApi)setBleConnectionChangeListener
+Set monitoring of measurement data (QNBleApi)setDataListener
+Building a user object that connects the scale (QNBleApi)buildUser:String userId,int height,String gender,Date birthday,QNResultCallback callback
+Connecting device connectDevice:QNBleDevice device,QNUser user,QNResultCallback callback
+Precautions
+You must apply for Bluetooth permissions, location permissions, network permissions in the manifest file (not required for offline SDK)
+SDK minimum support API version is 18
+The resources of the v4 package are used in the SDK, and the dependency of the v4 package needs to be introduced in the developer project.
+The service that the SDK needs to use must be added to the manifest file: com.qingniu.qnble.scanner.BleScanService, com.qingniu.scale.ble.ScaleBleService
+targetSdkVersion In 23 and above, you need to obtain the positioning permission before you can scan the device. You need to apply for it yourself.
+If your project is multi-process, it is recommended to limit the initialization of the SDK to the main process.
+common problem
+Initialization prompt appid error
+Check if the initialization file and the used appid match
+Check if the imported SDK is up to date
+Scan device call succeeded, but there is no device callback and no error callback
+Check if the scanned device is connected by someone else
+Some mobile phones need to turn on GPS to scan the device, please check if the mobile phone GPS is turned on.
+The connected device has been unsuccessful or has been disconnected soon after success.
+Check if the device is connected by someone else
+Check if the currently connected device has been paired in the system Bluetooth. If it is already paired, you need to cancel the pairing.
+Some phones need to be scanned before they can connect successfully. Scan the device before connecting.
+The obtained indicators are different from the number of indicators negotiated with the business.
+Check the device in question first, and the name displayed during scanning is correct.
+Heart rate scales, regardless of whether the heart rate indicator is open, the SDK will send heart rate indicators
+Data or device listening for callbacks, callback multiple times at the same time
+First determine if you have set up multiple listens. Must be set to null when the listener is not in use
+Determine if it is a shoe-wearing measurement, which may result in multiple measurements being completed in a short period of time.
+提示: I am having problems with untargeting. I hope that developers can provide logs in the first time so that we can find the problem as soon as possible.
